@@ -35,6 +35,9 @@ TRANSACTION_ORDER = {
     "ueberweisung_aus": 5,
 }
 
+DEFAULT_TRANSACTION_PATH = Path("data/reference/transaktionen")
+DEFAULT_OUTPUT_DIR = Path("output/reference-run")
+
 
 def run_bank_simulation(transaction_path: str | Path, output_dir: str | Path) -> dict[str, Any]:
     transactions = load_transactions(transaction_path)
@@ -192,18 +195,56 @@ def create_parser() -> argparse.ArgumentParser:
     return parser
 
 
-def main(argv: list[str] | None = None) -> int:
-    args = create_parser().parse_args(argv)
-    transaction_path = args.transaction_file or args.transactions or ".local/moodle-reference/extracted/transaktionen"
-    output_dir = args.output_dir or args.output or ".tmp-output/reference-run"
-    bank_state = run_bank_simulation(transaction_path, output_dir)
+def has_explicit_paths(args: argparse.Namespace) -> bool:
+    return any((args.transaction_file, args.transactions, args.output_dir, args.output))
+
+
+def prompt_for_paths() -> tuple[Path, Path] | None:
+    print("FS26 Python Bank")
+    print("================")
+    print("1. Run bundled reference data")
+    print("2. Run custom transaction path")
+    print("3. Exit")
+    choice = input("Choose an option [1]: ").strip() or "1"
+
+    if choice == "3":
+        return None
+    if choice == "1":
+        output = input(f"Output directory [{DEFAULT_OUTPUT_DIR}]: ").strip()
+        return DEFAULT_TRANSACTION_PATH, Path(output) if output else DEFAULT_OUTPUT_DIR
+    if choice == "2":
+        transaction_path = input("Transaction file or directory: ").strip()
+        if not transaction_path:
+            raise SystemExit("Transaction path is required.")
+        output = input(f"Output directory [{DEFAULT_OUTPUT_DIR}]: ").strip()
+        return Path(transaction_path), Path(output) if output else DEFAULT_OUTPUT_DIR
+
+    raise SystemExit(f"Unknown option: {choice}")
+
+
+def print_run_summary(bank_state: dict[str, Any]) -> None:
     print("Simulation completed.")
     print(f"Processed transactions: {bank_state['meta']['processed_transactions']}")
     print(f"Customer transaction entries: {sum(len(account['transactions']) for account in bank_state['accounts'].values())}")
     print(f"Ledger entries: {len(bank_state['ledger']['entries'])}")
+
+
+def main(argv: list[str] | None = None) -> int:
+    args = create_parser().parse_args(argv)
+    if not has_explicit_paths(args):
+        selected_paths = prompt_for_paths()
+        if selected_paths is None:
+            print("No simulation run.")
+            return 0
+        transaction_path, output_dir = selected_paths
+    else:
+        transaction_path = args.transaction_file or args.transactions or DEFAULT_TRANSACTION_PATH
+        output_dir = args.output_dir or args.output or DEFAULT_OUTPUT_DIR
+
+    bank_state = run_bank_simulation(transaction_path, output_dir)
+    print_run_summary(bank_state)
     return 0
 
 
 if __name__ == "__main__":
     raise SystemExit(main())
-

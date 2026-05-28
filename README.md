@@ -12,7 +12,8 @@ Moodle-facing JSON keys and existing assignment documentation may stay German wh
 - `docs/components/` contains component notes for the future implementation.
 - `docs/transaction-format.md` documents the expected transaction data shape.
 - `src/python_bank/` contains the implementation.
-- `tests/` contains unit tests and the optional Moodle reference comparison.
+- `tests/` contains unit tests and the Moodle reference comparison.
+- `data/reference/` contains the bundled seed and reference data.
 - `pyproject.toml` and `uv.lock` keep the Python project environment reproducible.
 
 ## Setup
@@ -27,7 +28,7 @@ Run the test suite:
 uv run pytest
 ```
 
-If the local Moodle reference data is available, the test suite also compares generated output against the official reference files.
+The test suite compares generated output against the bundled reference files.
 
 ## Expected Implementation Shape
 
@@ -39,26 +40,24 @@ The Moodle assignment expects a function-based Python implementation with these 
 - internal bank bookkeeping
 - JSON input and output
 
-No classes, UI, generated output, or reference test data are committed to this repository.
+No classes, UI, generated output, or logs are committed to this repository.
 
 ## Moodle Reference Data
 
-The official Moodle archive is course-private and should stay local.
-Download the "Transaktionsdaten Python Bank" resource into `.local/moodle-reference/` and extract it there.
-The file is named as a PDF in Moodle, but it is a ZIP archive.
-
-Expected local structure:
+The seed and reference data is committed under:
 
 ```text
-.local/moodle-reference/extracted/
+data/reference/
   transaktionen/
   konten/
   bankkonten.json
   zusammenfassung.json
 ```
 
-Run the full reference simulation manually:
+Run the simulator with explicit paths:
 
 ```bash
-uv run python-bank --transaction-file .local/moodle-reference/extracted/transaktionen --output-dir .tmp-output/reference-run
+uv run python-bank --transaction-file data/reference/transaktionen --output-dir output/reference-run
 ```
+
+Run `uv run python-bank` without arguments to open the small interactive terminal menu.

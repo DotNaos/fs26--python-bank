@@ -1,6 +1,7 @@
 from python_bank.engine import (
     group_transactions_by_date,
     ledger_time_from_transaction,
+    main,
     run_bank_simulation,
     sort_daily_batch,
 )
@@ -80,3 +81,15 @@ def test_small_simulation_writes_expected_files(tmp_path):
     assert (tmp_path / "out" / "konten" / "anna_muster.json").exists()
     assert read_json(tmp_path / "out" / "zusammenfassung.json")["anzahl_kunden"] == 1
 
+
+def test_no_argument_cli_uses_interactive_menu(monkeypatch, tmp_path, capsys):
+    output_dir = tmp_path / "menu-run"
+    answers = iter(["1", str(output_dir)])
+    monkeypatch.setattr("builtins.input", lambda _: next(answers))
+
+    assert main([]) == 0
+
+    captured = capsys.readouterr()
+    assert "FS26 Python Bank" in captured.out
+    assert "Simulation completed." in captured.out
+    assert (output_dir / "zusammenfassung.json").exists()

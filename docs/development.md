@@ -41,5 +41,5 @@ Keep generated files out of Git:
 
 ## Verification
 
-The test suite includes unit tests and an optional exact comparison against local Moodle reference data.
-Reference data is private course material and must remain under ignored `.local/moodle-reference/`.
+The test suite includes unit tests and an exact comparison against committed reference data under `data/reference/`.
+Generated output and logs must stay in ignored `output/`, `.tmp-output/`, or `logs/`.

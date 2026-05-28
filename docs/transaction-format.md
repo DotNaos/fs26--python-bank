@@ -94,5 +94,4 @@ The customer object also accepts `address` and `birth_date`.
 
 ## Sample File
 
-This repository does not commit sample transaction files.
-Use the local Moodle reference data under `.local/moodle-reference/extracted/transaktionen/` for full-system checks.
+Use the committed reference data under `data/reference/transaktionen/` for full-system checks.
