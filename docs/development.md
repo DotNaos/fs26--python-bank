@@ -1,7 +1,7 @@
 # Development
 
-This repository is currently a scaffold.
-It contains documentation and uv project metadata, but no implementation code or test data.
+Code, tests, CLI output, and developer-facing project structure use English names.
+Existing German documentation may stay German where it mirrors the Moodle assignment.
 
 ## Environment
 
@@ -13,9 +13,15 @@ uv sync
 
 This verifies that the Python project metadata is valid and creates the local environment.
 
+Run the tests:
+
+```bash
+uv run pytest
+```
+
 ## Future Implementation
 
-When implementation work starts, add the assignment modules deliberately and keep them function-based:
+The implementation is function-based and lives under `src/python_bank/`:
 
 - transaction engine
 - account management
@@ -31,8 +37,9 @@ Keep generated files out of Git:
 - `*.egg-info/`
 - `output/`
 - `.tmp-output/`
+- `.local/`
 
 ## Verification
 
-There is no test suite in this scaffold yet.
-When code is added, include representative tests and update this page with the exact commands.
+The test suite includes unit tests and an optional exact comparison against local Moodle reference data.
+Reference data is private course material and must remain under ignored `.local/moodle-reference/`.

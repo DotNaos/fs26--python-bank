@@ -1,9 +1,9 @@
 # FS26 Python Bank
 
-Scaffold repository for the FS26 Python Bank assignment.
+Function-based Python implementation for the FS26 Python Bank assignment.
 
-This repository intentionally contains only the project documentation and uv setup.
-Implementation code, tests, reference test data, generated output, and local cache files are not included.
+Implementation code and tests use English names.
+Moodle-facing JSON keys and existing assignment documentation may stay German where that matches the official wording.
 
 ## Contents
 
@@ -11,6 +11,8 @@ Implementation code, tests, reference test data, generated output, and local cac
 - `docs/system-overview.md` describes the intended system architecture.
 - `docs/components/` contains component notes for the future implementation.
 - `docs/transaction-format.md` documents the expected transaction data shape.
+- `src/python_bank/` contains the implementation.
+- `tests/` contains unit tests and the optional Moodle reference comparison.
 - `pyproject.toml` and `uv.lock` keep the Python project environment reproducible.
 
 ## Setup
@@ -19,8 +21,13 @@ Implementation code, tests, reference test data, generated output, and local cac
 uv sync
 ```
 
-The current scaffold has no runtime package and no test suite yet.
-Future implementation work should add the required Python modules and tests back deliberately.
+Run the test suite:
+
+```bash
+uv run pytest
+```
+
+If the local Moodle reference data is available, the test suite also compares generated output against the official reference files.
 
 ## Expected Implementation Shape
 
@@ -32,4 +39,26 @@ The Moodle assignment expects a function-based Python implementation with these 
 - internal bank bookkeeping
 - JSON input and output
 
-No classes, UI, generated output, or reference test data are part of this scaffold.
+No classes, UI, generated output, or reference test data are committed to this repository.
+
+## Moodle Reference Data
+
+The official Moodle archive is course-private and should stay local.
+Download the "Transaktionsdaten Python Bank" resource into `.local/moodle-reference/` and extract it there.
+The file is named as a PDF in Moodle, but it is a ZIP archive.
+
+Expected local structure:
+
+```text
+.local/moodle-reference/extracted/
+  transaktionen/
+  konten/
+  bankkonten.json
+  zusammenfassung.json
+```
+
+Run the full reference simulation manually:
+
+```bash
+uv run python-bank --transaction-file .local/moodle-reference/extracted/transaktionen --output-dir .tmp-output/reference-run
+```

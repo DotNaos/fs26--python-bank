@@ -1,13 +1,25 @@
+[build-system]
+requires = ["setuptools>=69"]
+build-backend = "setuptools.build_meta"
+
 [project]
 name = "fs26-python-bank"
 version = "0.1.0"
-description = "Scaffold for the FS26 Python Bank assignment."
+description = "Function-based bank transaction simulator for the FS26 Python Bank assignment."
 readme = "README.md"
 requires-python = ">=3.11"
 dependencies = []
 
-[dependency-groups]
-dev = []
+[project.scripts]
+python-bank = "python_bank.engine:main"
 
-[tool.uv]
-package = false
+[dependency-groups]
+dev = [
+  "pytest>=8.4,<9",
+]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

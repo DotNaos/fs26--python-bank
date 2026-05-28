@@ -94,5 +94,5 @@ The customer object also accepts `address` and `birth_date`.
 
 ## Sample File
 
-This scaffold does not include sample transaction files.
-When implementation work starts, add representative fixtures under `tests/fixtures/` and document the default sample file here.
+This repository does not commit sample transaction files.
+Use the local Moodle reference data under `.local/moodle-reference/extracted/transaktionen/` for full-system checks.
